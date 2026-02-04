@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasagala Plantation - Commission System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin-bottom: 5px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 12px 24px;
+            background: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .section-title {
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+        button.secondary {
+            background: #6c757d;
+        }
+        button.secondary:hover {
+            background: #5a6268;
+        }
+        button.danger {
+            background: #dc3545;
+        }
+        button.danger:hover {
+            background: #c82333;
+        }
+        button.success {
+            background: #28a745;
+        }
+        button.success:hover {
+            background: #218838;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        th {
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .filter-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .commission-amount {
+            color: #28a745;
+            font-weight: 600;
+        }
+        .search-box {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            width: 100%;
+            max-width: 400px;
+            font-size: 14px;
+        }
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .total-row {
+            background: #e8f5e9 !important;
+            font-weight: bold;
+        }
+        
+        /* Commission Structure Visualization */
+        .structure-container {
+            margin-top: 20px;
+        }
+        .quick-calc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .quick-calc h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .hierarchy-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .hierarchy-level {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        .hierarchy-level:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        .hierarchy-level.active-sale {
+            background: #e8f5e9;
+            border-color: #28a745;
+        }
+        .level-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .level-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+        .level-rate {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        .level-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .detail-label {
+            color: #666;
+            font-size: 13px;
+        }
+        .detail-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .flow-arrow {
+            text-align: center;
+            color: #667eea;
+            font-size: 24px;
+            margin: -5px 0;
+        }
+        .calculator-input {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .summary-card h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        .summary-item {
+            text-align: center;
+        }
+        .summary-item .label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+        .summary-item .value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Kasagala Plantation</h1>
+        <p>Commission Management System</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('structure')">🔄 Commission Structure</button>
+        <button class="tab" onclick="switchTab('personnel')">👥 Personnel Database</button>
+        <button class="tab" onclick="switchTab('rates')">💰 Commission Rates</button>
+        <button class="tab" onclick="switchTab('sales')">📈 Sales Entry</button>
+        <button class="tab" onclick="switchTab('reports')">📋 Monthly Reports</button>
+    </div>
+
+    <!-- Commission Structure Tab -->
+    <div id="structure" class="tab-content active">
+        <h2 class="section-title">Commission Structure & Flow Calculator</h2>
+        
+        <div class="quick-calc">
+            <h3>Quick Commission Calculator</h3>
+            <p style="color: #666; margin-bottom: 15px;">Enter a sale to see how commissions flow through the hierarchy</p>
+            
+            <div class="calculator-input">
+                <div class="form-group">
+                    <label>Select Employee Making the Sale</label>
+                    <select id="calcEmployee" onchange="calculateStructure()">
+                        <option value="">Choose employee...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sale Amount</label>
+                    <input type="number" id="calcAmount" placeholder="0.00" min="0" step="0.01" oninput="calculateStructure()">
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button onclick="calculateStructure()">Calculate</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="hierarchyFlow" class="hierarchy-flow"></div>
+        
+        <div id="structureSummary"></div>
+    </div>
+
+    <!-- Personnel Database Tab -->
+    <div id="personnel" class="tab-content">
+        <h2 class="section-title">Personnel Database</h2>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Employee Name *</label>
+                <input type="text" id="empName" placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label>Designation *</label>
+                <select id="empLevel">
+                    <option value="">Select Designation</option>
+                    <option value="Sales Executive">Sales Executive</option>
+                    <option value="Senior Sales Executive">Senior Sales Executive</option>
+                    <option value="Assistant Manager">Assistant Manager</option>
+                    <option value="Branch Manager">Branch Manager</option>
+                    <option value="Regional Manager">Regional Manager</option>
+                    <option value="Zonal Manager">Zonal Manager</option>
+                    <option value="Assistant General Manager">Assistant General Manager</option>
+                    <option value="Deputy General Manager">Deputy General Manager</option>
+                    <option value="General Manager">General Manager</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Employee ID (Optional)</label>
+                <input type="text" id="empId" placeholder="e.g., EMP001">
+            </div>
+            <div class="form-group">
+                <label>Reports To (Optional)</label>
+                <select id="empReportsTo">
+                    <option value="">Select Manager</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button onclick="addEmployee()">➕ Add Employee</button>
+            <button class="secondary" onclick="exportPersonnel()">📥 Export to CSV</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <input type="text" id="searchPersonnel" class="search-box" placeholder="🔍 Search employees..." onkeyup="filterPersonnel()">
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Reports To</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="personnelTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Commission Rates Tab -->
+    <div id="rates" class="tab-content">
+        <h2 class="section-title">Commission Rates Configuration</h2>
+        <p style="margin-bottom: 20px; color: #666;">Set commission percentage for each designation level</p>
+        
+        <div class="rates-grid" id="ratesGrid"></div>
+        
+        <div class="action-buttons">
+            <button onclick="saveRates()">💾 Save Rates</button>
+            <button class="secondary" onclick="resetRates()">🔄 Reset to Default</button>
+        </div>
+    </div>
+
+    <!-- Sales Entry Tab -->
+    <div id="sales" class="tab-content">
+        <h2 class="section-title">Record Sales</h2>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Select Employee *</label>
+                <select id="saleEmployee">
+                    <option value="">Choose employee...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Sale Amount *</label>
+                <input type="number" id="saleAmount" placeholder="0.00" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Sale Date *</label>
+                <input type="date" id="saleDate">
+            </div>
+            <div class="form-group">
+                <label>Description (Optional)</label>
+                <input type="text" id="saleDescription" placeholder="e.g., Product name, client">
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button onclick="addSale()">➕ Add Sale</button>
+            <button class="secondary" onclick="clearSaleForm()">🗑️ Clear Form</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <input type="text" id="searchSales" class="search-box" placeholder="🔍 Search sales..." onkeyup="filterSales()">
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Employee</th>
+                        <th>Designation</th>
+                        <th>Amount</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Monthly Reports Tab -->
+    <div id="reports" class="tab-content">
+        <h2 class="section-title">Monthly Commission Reports</h2>
+        
+        <div class="filter-section">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Select Month</label>
+                    <input type="month" id="reportMonth" onchange="generateReport()">
+                </div>
+                <div class="form-group">
+                    <label>Filter by Designation</label>
+                    <select id="reportLevel" onchange="generateReport()">
+                        <option value="">All Designations</option>
+                        <option value="Sales Executive">Sales Executive</option>
+                        <option value="Senior Sales Executive">Senior Sales Executive</option>
+                        <option value="Assistant Manager">Assistant Manager</option>
+                        <option value="Branch Manager">Branch Manager</option>
+                        <option value="Regional Manager">Regional Manager</option>
+                        <option value="Zonal Manager">Zonal Manager</option>
+                        <option value="Assistant General Manager">Assistant General Manager</option>
+                        <option value="Deputy General Manager">Deputy General Manager</option>
+                        <option value="General Manager">General Manager</option>
+                    </select>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button onclick="generateReport()">📊 Generate Report</button>
+                <button class="success" onclick="exportReport()">📥 Export to CSV</button>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Designation</th>
+                        <th>Direct Sales</th>
+                        <th>Team Sales Volume</th>
+                        <th>Total Volume</th>
+                        <th>Commission Rate</th>
+                        <th>Commission Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let personnel = [];
+        let sales = [];
+        let commissionRates = {
+            'Sales Executive': 2,
+            'Senior Sales Executive': 1.5,
+            'Assistant Manager': 1,
+            'Branch Manager': 0.75,
+            'Regional Manager': 0.5,
+            'Zonal Manager': 0.4,
+            'Assistant General Manager': 0.3,
+            'Deputy General Manager': 0.2,
+            'General Manager': 0.1
+        };
+
+        const hierarchy = [
+            'Sales Executive',
+            'Senior Sales Executive',
+            'Assistant Manager',
+            'Branch Manager',
+            'Regional Manager',
+            'Zonal Manager',
+            'Assistant General Manager',
+            'Deputy General Manager',
+            'General Manager'
+        ];
+
+        // Load data from localStorage
+        function loadData() {
+            const savedPersonnel = localStorage.getItem('personnel');
+            const savedSales = localStorage.getItem('sales');
+            const savedRates = localStorage.getItem('commissionRates');
+            
+            if (savedPersonnel) personnel = JSON.parse(savedPersonnel);
+            if (savedSales) sales = JSON.parse(savedSales);
+            if (savedRates) commissionRates = JSON.parse(savedRates);
+            
+            updateAllTables();
+            initializeRates();
+            updateReportsToDropdown();
+            updateSaleEmployeeDropdown();
+            updateCalcEmployeeDropdown();
+            
+            // Set default month to current month
+            const today = new Date();
+            document.getElementById('reportMonth').value = today.toISOString().slice(0, 7);
+            document.getElementById('saleDate').value = today.toISOString().slice(0, 10);
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('personnel', JSON.stringify(personnel));
+            localStorage.setItem('sales', JSON.stringify(sales));
+            localStorage.setItem('commissionRates', JSON.stringify(commissionRates));
+        }
+
+        // Tab Switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Commission Structure Calculator
+        function updateCalcEmployeeDropdown() {
+            const select = document.getElementById('calcEmployee');
+            select.innerHTML = '<option value="">Choose employee...</option>';
+            
+            personnel.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id;
+                option.textContent = `${emp.name} - ${emp.level}`;
+                select.appendChild(option);
+            });
+        }
+
+        function calculateStructure() {
+            const employeeId = document.getElementById('calcEmployee').value;
+            const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
+
+            if (!employeeId || amount <= 0) {
+                document.getElementById('hierarchyFlow').innerHTML = '<p style="color: #999; text-align: center; padding: 40px;">Select an employee and enter an amount to see commission flow</p>';
+                document.getElementById('structureSummary').innerHTML = '';
+                return;
+            }
+
+            const employee = personnel.find(p => p.id === employeeId);
+            if (!employee) return;
+
+            const levelIndex = hierarchy.indexOf(employee.level);
+            const flowHTML = [];
+            let totalCommission = 0;
+            const commissionBreakdown = [];
+
+            // Generate flow for this employee and all above
+            for (let i = levelIndex; i < hierarchy.length; i++) {
+                const level = hierarchy[i];
+                const rate = commissionRates[level];
+                const commission = (amount * rate) / 100;
+                totalCommission += commission;
+
+                const isActiveSale = (i === levelIndex);
+                
+                commissionBreakdown.push({
+                    level: level,
+                    rate: rate,
+                    commission: commission,
+                    isActive: isActiveSale
+                });
+
+                flowHTML.push(`
+                    <div class="hierarchy-level ${isActiveSale ? 'active-sale' : ''}">
+                        <div class="level-header">
+                            <span class="level-name">${level} ${isActiveSale ? '(Sale Made Here)' : ''}</span>
+                            <span class="level-rate">${rate}%</span>
+                        </div>
+                        <div class="level-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Sale Volume</span>
+                                <span class="detail-value">${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Commission Rate</span>
+                                <span class="detail-value">${rate}%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Commission Amount</span>
+                                <span class="detail-value commission-amount">${commission.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                if (i < hierarchy.length - 1) {
+                    flowHTML.push('<div class="flow-arrow">↓</div>');
+                }
+            }
+
+            document.getElementById('hierarchyFlow').innerHTML = flowHTML.join('');
+
+            // Summary card
+            const summaryHTML = `
+                <div class="summary-card">
+                    <h3>💰 Commission Summary</h3>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="label">Sale By</div>
+                            <div class="value">${employee.name}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Sale Amount</div>
+                            <div class="value">${amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Levels Earning</div>
+                            <div class="value">${commissionBreakdown.length}</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label">Total Commission</div>
+                            <div class="value">${totalCommission.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('structureSummary').innerHTML = summaryHTML;
+        }
+
+        // Personnel Management
+        function addEmployee() {
+            const name = document.getElementById('empName').value.trim();
+            const level = document.getElementById('empLevel').value;
+            const id = document.getElementById('empId').value.trim() || `EMP${Date.now()}`;
+            const reportsTo = document.getElementById('empReportsTo').value;
+
+            if (!name || !level) {
+                alert('Please fill in required fields (Name and Designation)');
+                return;
+            }
+
+            personnel.push({
+                id: id,
+                name: name,
+                level: level,
+                reportsTo: reportsTo,
+                dateAdded: new Date().toISOString()
+            });
+
+            saveData();
+            updateAllTables();
+            clearEmployeeForm();
+            alert('Employee added successfully!');
+        }
+
+        function clearEmployeeForm() {
+            document.getElementById('empName').value = '';
+            document.getElementById('empLevel').value = '';
+            document.getElementById('empId').value = '';
+            document.getElementById('empReportsTo').value = '';
+        }
+
+        function deleteEmployee(index) {
+            if (confirm('Are you sure you want to delete this employee?')) {
+                personnel.splice(index, 1);
+                saveData();
+                updateAllTables();
+            }
+        }
+
+        function updatePersonnelTable() {
+            const tbody = document.getElementById('personnelTable');
+            tbody.innerHTML = '';
+
+            personnel.forEach((emp, index) => {
+                const manager = personnel.find(p => p.id === emp.reportsTo);
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${emp.id}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.level}</td>
+                    <td>${manager ? manager.name : '-'}</td>
+                    <td>
+                        <button class="danger" onclick="deleteEmployee(${index})" style="padding: 6px 12px; font-size: 12px;">Delete</button>
+                    </td>
+                `;
+            });
+        }
+
+        function filterPersonnel() {
+            const search = document.getElementById('searchPersonnel').value.toLowerCase();
+            const rows = document.querySelectorAll('#personnelTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        function updateReportsToDropdown() {
+            const select = document.getElementById('empReportsTo');
+            select.innerHTML = '<option value="">Select Manager</option>';
+            
+            personnel.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id;
+                option.textContent = `${emp.name} (${emp.level})`;
+                select.appendChild(option);
+            });
+        }
+
+        // Commission Rates
+        function initializeRates() {
+            const grid = document.getElementById('ratesGrid');
+            grid.innerHTML = '';
+
+            hierarchy.forEach(level => {
+                const div = document.createElement('div');
+                div.className = 'form-group';
+                div.innerHTML = `
+                    <label>${level}</label>
+                    <input type="number" 
+                           value="${commissionRates[level]}" 
+                           step="0.01" 
+                           min="0"
+                           id="rate-${level}"
+                           style="padding: 10px;">
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function saveRates() {
+            hierarchy.forEach(level => {
+                const input = document.getElementById(`rate-${level}`);
+                commissionRates[level] = parseFloat(input.value) || 0;
+            });
+            saveData();
+            alert('Commission rates saved successfully!');
+            calculateStructure(); // Recalculate if structure is shown
+        }
+
+        function resetRates() {
+            if (confirm('Reset all rates to default values?')) {
+                commissionRates = {
+                    'Sales Executive': 2,
+                    'Senior Sales Executive': 1.5,
+                    'Assistant Manager': 1,
+                    'Branch Manager': 0.75,
+                    'Regional Manager': 0.5,
+                    'Zonal Manager': 0.4,
+                    'Assistant General Manager': 0.3,
+                    'Deputy General Manager': 0.2,
+                    'General Manager': 0.1
+                };
+                initializeRates();
+                saveData();
+                calculateStructure();
+            }
+        }
+
+        // Sales Management
+        function updateSaleEmployeeDropdown() {
+            const select = document.getElementById('saleEmployee');
+            select.innerHTML = '<option value="">Choose employee...</option>';
+            
+            personnel.forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp.id;
+                option.textContent = `${emp.name} - ${emp.level}`;
+                select.appendChild(option);
+            });
+        }
+
+        function addSale() {
+            const employeeId = document.getElementById('saleEmployee').value;
+            const amount = parseFloat(document.getElementById('saleAmount').value);
+            const date = document.getElementById('saleDate').value;
+            const description = document.getElementById('saleDescription').value.trim();
+
+            if (!employeeId || !amount || !date) {
+                alert('Please fill in required fields (Employee, Amount, Date)');
+                return;
+            }
+
+            const employee = personnel.find(p => p.id === employeeId);
+            if (!employee) {
+                alert('Employee not found');
+                return;
+            }
+
+            sales.push({
+                id: `SALE${Date.now()}`,
+                employeeId: employeeId,
+                employeeName: employee.name,
+                employeeLevel: employee.level,
+                amount: amount,
+                date: date,
+                description: description,
+                timestamp: new Date().toISOString()
+            });
+
+            saveData();
+            updateSalesTable();
+            clearSaleForm();
+            alert('Sale recorded successfully!');
+        }
+
+        function clearSaleForm() {
+            document.getElementById('saleEmployee').value = '';
+            document.getElementById('saleAmount').value = '';
+            document.getElementById('saleDescription').value = '';
+            document.getElementById('saleDate').value = new Date().toISOString().slice(0, 10);
+        }
+
+        function deleteSale(index) {
+            if (confirm('Are you sure you want to delete this sale?')) {
+                sales.splice(index, 1);
+                saveData();
+                updateSalesTable();
+            }
+        }
+
+        function updateSalesTable() {
+            const tbody = document.getElementById('salesTable');
+            tbody.innerHTML = '';
+
+            const sortedSales = [...sales].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedSales.forEach((sale, index) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${sale.date}</td>
+                    <td>${sale.employeeName}</td>
+                    <td>${sale.employeeLevel}</td>
+                    <td class="commission-amount">${sale.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td>${sale.description || '-'}</td>
+                    <td>
+                        <button class="danger" onclick="deleteSale(${sales.indexOf(sale)})" style="padding: 6px 12px; font-size: 12px;">Delete</button>
+                    </td>
+                `;
+            });
+        }
+
+        function filterSales() {
+            const search = document.getElementById('searchSales').value.toLowerCase();
+            const rows = document.querySelectorAll('#salesTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        // Reports
+        function generateReport() {
+            const month = document.getElementById('reportMonth').value;
+            const levelFilter = document.getElementById('reportLevel').value;
+
+            if (!month) {
+                alert('Please select a month');
+                return;
+            }
+
+            const monthSales = sales.filter(sale => sale.date.startsWith(month));
+            const commissions = {};
+            
+            personnel.forEach(emp => {
+                if (levelFilter && emp.level !== levelFilter) return;
+
+                commissions[emp.id] = {
+                    name: emp.name,
+                    level: emp.level,
+                    directSales: 0,
+                    teamVolume: 0,
+                    totalVolume: 0,
+                    commission: 0
+                };
+            });
+
+            monthSales.forEach(sale => {
+                const employee = personnel.find(p => p.id === sale.employeeId);
+                if (!employee) return;
+
+                const levelIndex = hierarchy.indexOf(employee.level);
+
+                for (let i = levelIndex; i < hierarchy.length; i++) {
+                    personnel.forEach(emp => {
+                        if (emp.level === hierarchy[i] && commissions[emp.id]) {
+                            if (emp.id === sale.employeeId) {
+                                commissions[emp.id].directSales += sale.amount;
+                            } else {
+                                commissions[emp.id].teamVolume += sale.amount;
+                            }
+                            commissions[emp.id].totalVolume += sale.amount;
+                        }
+                    });
+                }
+            });
+
+            Object.values(commissions).forEach(data => {
+                data.commission = (data.totalVolume * commissionRates[data.level]) / 100;
+            });
+
+            displayReport(commissions, monthSales);
+        }
+
+        function displayReport(commissions, monthSales) {
+            const statsGrid = document.getElementById('statsGrid');
+            const totalSales = monthSales.reduce((sum, sale) => sum + sale.amount, 0);
+            const totalCommission = Object.values(commissions).reduce((sum, data) => sum + data.commission, 0);
+
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <div class="value">${totalSales.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Commission</h3>
+                    <div class="value">${totalCommission.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Number of Sales</h3>
+                    <div class="value">${monthSales.length}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Employees</h3>
+                    <div class="value">${Object.keys(commissions).length}</div>
+                </div>
+            `;
+
+            const tbody = document.getElementById('reportTable');
+            tbody.innerHTML = '';
+
+            const sortedCommissions = Object.values(commissions)
+                .filter(data => data.totalVolume > 0)
+                .sort((a, b) => b.totalVolume - a.totalVolume);
+
+            sortedCommissions.forEach(data => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${data.name}</td>
+                    <td>${data.level}</td>
+                    <td class="commission-amount">${data.directSales.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td>${data.teamVolume.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                    <td><strong>${data.totalVolume.toLocaleString(undefined, {minimumFractionDigits: 2})}</strong></td>
+                    <td>${commissionRates[data.level]}%</td>
+                    <td class="commission-amount"><strong>${data.commission.toLocaleString(undefined, {minimumFractionDigits: 2})}</strong></td>
+                `;
+            });
+
+            const totalRow = tbody.insertRow();
+            totalRow.className = 'total-row';
+            const totalDirectSales = sortedCommissions.reduce((sum, data) => sum + data.directSales, 0);
+            const totalTeamVolume = sortedCommissions.reduce((sum, data) => sum + data.teamVolume, 0);
+            
+            totalRow.innerHTML = `
+                <td colspan="2"><strong>TOTAL</strong></td>
+                <td class="commission-amount"><strong>${totalDirectSales.toLocaleString(undefined, {minimumFractionDigits: 2})}</strong></td>
+                <td><strong>${totalTeamVolume.toLocaleString(undefined, {minimumFractionDigits: 2})}</strong></td>
+                <td><strong>${totalSales.toLocaleString(undefined, {minimumFractionDigits: 2})}</strong></td>
+                <td>-</td>
+                <td class="commission-amount"><strong>${totalCommission.toLocaleString(undefined, {minimumFractionDigits: 2})}</strong></td>
+            `;
+        }
+
+        function exportReport() {
+            const month = document.getElementById('reportMonth').value;
+            if (!month) {
+                alert('Please generate a report first');
+                return;
+            }
+
+            const table = document.getElementById('reportTable');
+            let csv = 'Employee,Designation,Direct Sales,Team Sales Volume,Total Volume,Commission Rate,Commission Amount\n';
+
+            for (let row of table.rows) {
+                const cells = row.cells;
+                const rowData = [];
+                for (let cell of cells) {
+                    rowData.push(cell.textContent.replace(/,/g, ''));
+                }
+                csv += rowData.join(',') + '\n';
+            }
+
+            downloadCSV(csv, `commission_report_${month}.csv`);
+        }
+
+        function exportPersonnel() {
+            let csv = 'Employee ID,Name,Designation,Reports To\n';
+            personnel.forEach(emp => {
+                const manager = personnel.find(p => p.id === emp.reportsTo);
+                csv += `${emp.id},${emp.name},${emp.level},${manager ? manager.name : ''}\n`;
+            });
+            downloadCSV(csv, 'personnel_database.csv');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function updateAllTables() {
+            updatePersonnelTable();
+            updateSalesTable();
+            updateReportsToDropdown();
+            updateSaleEmployeeDropdown();
+            updateCalcEmployeeDropdown();
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
